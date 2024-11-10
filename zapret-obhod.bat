@@ -26,7 +26,7 @@ echo.
 echo ========================== YTAZH52 ==============================
 timeout /t 1 >nul
 
-mode con: cols=52 lines=10
+mode con: cols=65 lines=10
 
 REM URL для обновления скрипта
 set "url=https://raw.githubusercontent.com/jester19686/obhod/main/zapret-obhod.bat"
