@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal enabledelayedexpansion
-mode con: cols=42 lines=9
+mode con: cols=52 lines=10
 
 
 REM Указываем папку для хранения файлов
@@ -232,6 +232,8 @@ echo Финальные аргументы: !ARGS!
 :: Название сервиса
 set SRVCNAME=zapret
 
+mode con: cols=48 lines=4
+
 :: Останавливаем и удаляем старый сервис, если он существует
 cls
 color 0A
@@ -245,9 +247,9 @@ timeout /t 1 /nobreak >nul
 :: Создаём новый сервис
 cls
 color 0A
-    echo ==========================
+    echo ================================================
     echo Создание нового сервиса...
-    echo ==========================
+    echo ================================================
 sc create %SRVCNAME% binPath= "\"%BIN_PATH%winws.exe\" !ARGS!" DisplayName= "zapret" start= auto >nul 2>&1
 if %errorlevel% neq 0 (
     echo Ошибка при создании сервиса! Проверьте правильность путей и прав доступа.
@@ -262,9 +264,9 @@ sc description %SRVCNAME% "zapret DPI bypass software" >nul 2>&1
 :: Запускаем сервис
 cls
 color 0A
-    echo =================
+    echo ================================================
     echo Запуск сервиса...
-    echo =================
+    echo ================================================
 sc start %SRVCNAME% >nul 2>&1
 if %errorlevel% neq 0 (
     echo Ошибка при запуске сервиса! Проверьте логи и конфигурацию.
@@ -275,11 +277,11 @@ timeout /t 1 /nobreak >nul
 
 cls
 color 0A
-    echo ================================
+    echo ================================================
     echo Сервис успешно создан и запущен.
-    echo ================================
+    echo ================================================
 
-timeout /t 2 /nobreak >nul
+timeout /t 5 /nobreak >nul
 
 REM Завершаем выполнение программы
 exit /b
