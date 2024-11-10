@@ -4,27 +4,6 @@ setlocal enabledelayedexpansion
 mode con: cols=52 lines=10
 
 
-REM URL для обновления скрипта
-set "url=https://raw.githubusercontent.com/jester19686/obhod/main/zapret-obhod.bat"
-set "tempFile=%TEMP%\zapret-obhod-temp.bat"
-set "currentFile=%~f0"
-
-REM Проверка на обновление скрипта
-powershell -command "(New-Object Net.WebClient).DownloadFile('%url%', '%tempFile%')"
-
-fc /b "%currentFile%" "%tempFile%" >nul
-if %errorlevel% neq 0 (
-    echo Обнаружено обновление. Обновляемся...
-    copy /y "%tempFile%" "%currentFile%"
-    echo Скрипт обновлен. Перезапуск...
-    start "" "%currentFile%"
-    exit
-) else (
-    echo Обновлений нет. Продолжаем выполнение скрипта.
-)
-
-del "%tempFile%"
-
 REM Указываем папку для хранения файлов
 set "folder=bin"
 
@@ -383,7 +362,27 @@ exit /b
 cls
 REM Скачиваем и проверяем наличие файла COD_FIXv2.bat, если его нет, скачиваем
 
+mode con: cols=75 lines=42
 
+cls
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+cls
+if '%errorlevel%' NEQ '0' (
+    
+    mode con: cols=80 lines=25
+    
+    cls
+    color 0A
+    echo =====================================================
+    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
+    echo =====================================================
+    echo.
+    pause
+    pause
+
+    exit /b
+)
 
 color 0A
     echo ===================================================
@@ -414,27 +413,6 @@ if not exist "%file10%" (
     exit /b 1
 )
 
-mode con: cols=75 lines=42
-
-cls
-REM Проверяем, запущен ли скрипт от имени администратора
-openfiles >nul 2>nul
-cls
-if '%errorlevel%' NEQ '0' (
-    
-    mode con: cols=75 lines=42
-    
-    cls
-    color 0A
-    echo =====================================================
-    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
-    echo =====================================================
-    echo.
-    pause
-    pause
-
-    exit /b
-)
 
 mode con: cols=52 lines=4
 
