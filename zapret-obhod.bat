@@ -549,17 +549,9 @@ if exist "%file%" (
     del "%file%"
 )
 
-REM Загружаем файл с URL
-echo Загружаю %file% ...
-powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile '%file%'"
-
-REM Проверка успешности загрузки
-if exist "%file%" (
-    echo %file% успешно загружен.
-) else (
-    echo Ошибка загрузки %file%. Проверьте подключение или URL.
-)
-goto :eof
+call :check_and_download "%file4%" "%url4%" >nul
+call :check_and_download "%file5%" "%url5%" >nul
+call :check_and_download "%file6%" "%url6%" >nul
 
 cls
 color 0B
