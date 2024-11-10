@@ -33,7 +33,11 @@ fc /b "%currentFile%" "%tempFile%" >nul
 if %errorlevel% neq 0 (
     echo Обнаружено обновление. Обновляемся...
     copy /y "%tempFile%" "%currentFile%"
+    cls
+    echo ================================================================
     echo Скрипт обновлен. Перезапуск...
+    echo ========================== YTAZH52 =============================
+    timeout /t 2 /nobreak >nul
     start "" "%currentFile%"
     exit
 ) else (
