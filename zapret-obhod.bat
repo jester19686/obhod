@@ -378,9 +378,8 @@ if '%errorlevel%' NEQ '0' (
     echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
     echo =====================================================
     echo.
-    pause
-    pause
-
+         
+    timeout /t 4 /nobreak >nul
     exit /b
 )
 
