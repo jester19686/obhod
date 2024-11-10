@@ -10,6 +10,33 @@ if not exist "%folder%" (
     mkdir "%folder%"
 )
 
+REM Путь к файлу-флагу
+set "flag_file=%~dp0bin\first_run_flag.txt"
+
+REM Проверяем, существует ли файл флага
+if not exist "%flag_file%" (
+    :: Это первый запуск, не запускаем от имени администратора
+    cls
+    echo Это первый запуск программы. Перезапустите программу не от имени администратора.
+    echo Программа автоматически закроется через 5 секунд.
+
+    :: Создаем файл-флаг в папке bin, чтобы при последующих запусках текст не выводился
+    echo This is the first run. > "%flag_file%"
+
+    :: Закрываем программу через 5 секунд
+    timeout /t 5 /nobreak >nul
+    exit /b
+) else (
+    :: Это не первый запуск, проверяем, есть ли права администратора
+    openfiles >nul 2>nul
+    if '%errorlevel%' NEQ '0' (
+        :: Если прав нет, перезапускаем скрипт с правами администратора
+        echo Необходимы права администратора. Перезапускаю скрипт с правами администратора...
+        powershell -Command "Start-Process cmd -ArgumentList '/c, %~f0' -Verb RunAs"
+        exit /b
+    )
+)
+
 REM Указываем файлы и их URL для загрузки
 set "file1=%folder%\WinDivert.dll"
 set "url1=https://raw.githubusercontent.com/jester19686/obhod/main/bin/WinDivert.dll"
@@ -38,6 +65,9 @@ set "url8=https://raw.githubusercontent.com/jester19686/obhod/main/bin/tls_clien
 set "file9=%folder%\winws.exe"
 set "url9=https://raw.githubusercontent.com/jester19686/obhod/main/bin/winws.exe"
 
+set "file10=COD_FIXv2.bat"
+set "url10=https://raw.githubusercontent.com/jester19686/obhod/main/COD_FIXv2.bat"
+
 REM Очищаем экран перед началом загрузки
 cls
 
@@ -63,11 +93,14 @@ echo Все файлы успешно загружены.
 
 REM Меню выбора действия
 echo.
+
+echo.
 echo Выберите код для выполнения:
 echo 1. Временный обход
 echo 2. Постоянный обход (автозапуск)
 echo 3. Удалить обход (автозапуск)
-set /p choice=Введите номер выбранного действия (1, 2, 3):
+echo 4. Warzone (фикс-костыль)
+set /p choice=Введите номер выбранного действия (1, 2, 3, 4):
 
 if "%choice%"=="1" (
     call :temporary_bypass
@@ -75,6 +108,8 @@ if "%choice%"=="1" (
     call :permanent_bypass
 ) else if "%choice%"=="3" (
     call :remove_bypass
+) else if "%choice%"=="4" (
+    call :warzone_fix
 ) else (
     echo Неверный выбор. Завершаю программу.
     exit /b
@@ -116,11 +151,18 @@ echo Выполняется временный обход...
 cd /d "%~dp0"
 set BIN=%~dp0bin\
 
-start "zapret: general" /min "%BIN%winws.exe" --wf-tcp=80,443 --wf-udp=443,50000-50100 ^
---filter-udp=443 --hostlist="%BIN%\list-general.txt" --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic="%BIN%\quic_initial_www_google_com.bin" --new ^
---filter-udp=50000-50100 --ipset="%BIN%\ipset-discord.txt" --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-cutoff=d3 --dpi-desync-repeats=6 --new ^
---filter-tcp=80 --hostlist="%BIN%\list-general.txt" --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --new ^
---filter-tcp=443 --hostlist="%BIN%\list-general.txt" --dpi-desync=fake,split --dpi-desync-autottl=2 --dpi-desync-repeats=6 --dpi-desync-fooling=badseq --dpi-desync-fake-tls="%BIN%\tls_clienthello_www_google_com.bin"
+start "zapret: general" /min "%BIN%winws.exe" ^
+  --wf-tcp=80,443 --wf-udp=443,50000-50100 ^
+  --filter-udp=443 --hostlist="%BIN%list-general.txt" ^
+  --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic="%BIN%quic_initial_www_google_com.bin" ^
+  --new --filter-udp=50000-50100 --ipset="%BIN%ipset-discord.txt" ^
+  --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-cutoff=d3 --dpi-desync-repeats=6 ^
+  --new --filter-tcp=80 --hostlist="%BIN%list-general.txt" ^
+  --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig ^
+  --new --filter-tcp=443 --hostlist="%BIN%list-general.txt" ^
+  --dpi-desync=fake,split --dpi-desync-autottl=2 --dpi-desync-repeats=6 ^
+  --dpi-desync-fooling=badseq --dpi-desync-fake-tls="%BIN%tls_clienthello_www_google_com.bin"
+
 
 echo Временный обход выполнен.
 
@@ -132,11 +174,17 @@ REM Постоянный обход (автозапуск)
 
 REM Добавляем код для создания сервиса
 
+REM Очищаем экран перед выводом сообщения о необходимости прав администратора
 cls
 
-echo Предупреждение: Данный файл должен быть запущен с правами администратора (ПКМ - Запустить от имени администратора).
-echo Нажмите любую клавишу, чтобы продолжить создание сервиса.
-pause
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+if '%errorlevel%' NEQ '0' (
+    echo Необходимо запустить скрипт с правами администратора.
+    pause
+    exit /b
+)
+
 cls
 
 cd /d "%~dp0"
@@ -214,3 +262,45 @@ echo Обход (автозапуск) успешно удален.
 REM Завершаем выполнение программы
 exit /b
 
+
+:warzone_fix
+cls
+REM Скачиваем и проверяем наличие файла COD_FIXv2.bat, если его нет, скачиваем
+
+echo Скачиваю и проверяю наличие файла COD_FIXv2.bat...
+
+if not exist "%file10%" (
+    echo Файл %file10% не найден. Загружаю файл...
+    powershell -Command "Invoke-WebRequest -Uri %url10% -OutFile %file10%"
+    if %ERRORLEVEL% NEQ 0 (
+        echo Ошибка загрузки файла %file10%. Код ошибки: %ERRORLEVEL%
+        timeout /t 2 /nobreak >nul
+        exit /b 1
+    )
+)
+
+
+cls
+REM Проверяем успешность загрузки
+if not exist "%file10%" (
+    echo Файл %file10% не был загружен. Завершаю программу.
+    exit /b 1
+)
+
+cls
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+if '%errorlevel%' NEQ '0' (
+    echo Необходимо запустить скрипт с правами администратора.
+    pause
+    exit /b
+)
+
+cls
+REM Запуск файла COD_FIXv2.bat
+echo Файл COD_FIXv2.bat найден, выполняю...
+call "%file10%"
+timeout /t 2 /nobreak >nul
+
+REM Завершаем выполнение программы
+exit /b
