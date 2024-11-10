@@ -517,7 +517,7 @@ echo ================================
 timeout /t 1 /nobreak >nul
 
 REM Указываем папку для хранения файлов
-set "folder=bin"
+set "folder=%bin%"
 
 REM Убедимся, что папка существует, если нет — создаем ее
 if not exist "%folder%" (
