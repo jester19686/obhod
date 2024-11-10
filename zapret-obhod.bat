@@ -498,11 +498,29 @@ exit /b
 :update_bases
 REM Обновление баз из GitHub
 
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+if '%errorlevel%' NEQ '0' (
+    cls
+    color 0A
+    echo =====================================================
+    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
+    echo =====================================================
+    echo.
+    timeout /t 4 /nobreak >nul
+    exit /b
+)
+
+
 cls
 color 0B
 echo ================================
 echo Обновление баз...
 echo ================================
+
+timeout /t 1 /nobreak >nul
+
+
 
 REM Скачиваем файлы заново
 set "file4=%folder%\ipset-discord.txt"
