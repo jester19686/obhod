@@ -15,15 +15,16 @@ set "flag_file=%~dp0bin\first_run_flag.txt"
 
 REM Проверяем, существует ли файл флага
 if not exist "%flag_file%" (
-    :: Это первый запуск, не запускаем от имени администратора
-    cls
-    echo Это первый запуск программы. Перезапустите программу не от имени администратора.
+     cls
+    color 0A
+    echo ================================
+    echo  Это первый запуск программы
+    echo  Перезапустите программу без прав администратора.
+    echo ================================
+    echo.
     echo Программа автоматически закроется через 5 секунд.
-
-    :: Создаем файл-флаг в папке bin, чтобы при последующих запусках текст не выводился
+    echo ================================
     echo This is the first run. > "%flag_file%"
-
-    :: Закрываем программу через 5 секунд
     timeout /t 5 /nobreak >nul
     exit /b
 ) else (
@@ -31,7 +32,12 @@ if not exist "%flag_file%" (
     openfiles >nul 2>nul
     if '%errorlevel%' NEQ '0' (
         :: Если прав нет, перезапускаем скрипт с правами администратора
-        echo Необходимы права администратора. Перезапускаю скрипт с правами администратора...
+        cls
+        color 0C
+        echo ================================
+        echo  Необходимы права администратора
+        echo  Перезапускаю с правами администратора...
+        echo ================================
         powershell -Command "Start-Process cmd -ArgumentList '/c, %~f0' -Verb RunAs"
         exit /b
     )
@@ -67,29 +73,6 @@ set "url9=https://raw.githubusercontent.com/jester19686/obhod/main/bin/winws.exe
 
 set "file10=COD_FIXv2.bat"
 set "url10=https://raw.githubusercontent.com/jester19686/obhod/main/COD_FIXv2.bat"
-
-REM Путь к локальному файлу скрипта
-set "localScriptFile=%~f0"
-set "tempScriptFile=%~dp0temp_script.bat"
-set "scriptUrl=https://raw.githubusercontent.com/jester19686/obhod/main/%~nx0"
-
-REM Проверка и обновление скрипта
-echo Проверка на обновление скрипта...
-
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%scriptUrl%', '%tempScriptFile%')"
-
-fc /B "%localScriptFile%" "%tempScriptFile%" > nul
-if %errorlevel% NEQ 0 (
-    echo Скрипт обновляется...
-    timeout /t 3 /nobreak > nul
-    move /Y "%tempScriptFile%" "%localScriptFile%"
-    echo Скрипт обновлён. Перезапуск через 3 секунды...
-    timeout /t 3 /nobreak > nul
-    "%localScriptFile%"
-    exit /b
-) else (
-    del "%tempScriptFile%"
-)
 
 REM Очищаем экран перед началом загрузки
 cls
@@ -175,16 +158,17 @@ cd /d "%~dp0"
 set BIN=%~dp0bin\
 
 start "zapret: general" /min "%BIN%winws.exe" ^
-  --wf-tcp=80,443 --wf-udp=443,50000-50100 ^ 
-  --filter-udp=443 --hostlist="%BIN%list-general.txt" ^ 
-  --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic="%BIN%quic_initial_www_google_com.bin" ^ 
-  --new --filter-udp=50000-50100 --ipset="%BIN%ipset-discord.txt" ^ 
-  --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-cutoff=d3 --dpi-desync-repeats=6 ^ 
-  --new --filter-tcp=80 --hostlist="%BIN%list-general.txt" ^ 
-  --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig ^ 
-  --new --filter-tcp=443 --hostlist="%BIN%list-general.txt" ^ 
-  --dpi-desync=fake,split --dpi-desync-autottl=2 --dpi-desync-repeats=6 ^ 
+  --wf-tcp=80,443 --wf-udp=443,50000-50100 ^
+  --filter-udp=443 --hostlist="%BIN%list-general.txt" ^
+  --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic="%BIN%quic_initial_www_google_com.bin" ^
+  --new --filter-udp=50000-50100 --ipset="%BIN%ipset-discord.txt" ^
+  --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-cutoff=d3 --dpi-desync-repeats=6 ^
+  --new --filter-tcp=80 --hostlist="%BIN%list-general.txt" ^
+  --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig ^
+  --new --filter-tcp=443 --hostlist="%BIN%list-general.txt" ^
+  --dpi-desync=fake,split --dpi-desync-autottl=2 --dpi-desync-repeats=6 ^
   --dpi-desync-fooling=badseq --dpi-desync-fake-tls="%BIN%tls_clienthello_www_google_com.bin"
+
 
 echo Временный обход выполнен.
 
@@ -249,6 +233,80 @@ if %errorlevel% neq 0 (
 )
 
 echo Сервис успешно создан и запущен.
+
+REM Завершаем выполнение программы
+exit /b
+
+:remove_bypass
+REM Удалить обход (автозапуск)
+
+REM Очищаем экран перед выводом сообщения о необходимости прав администратора
+cls
+
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+if '%errorlevel%' NEQ '0' (
+    echo Необходимо запустить скрипт с правами администратора.
+    pause
+    exit /b
+)
+
+REM После проверки прав администратора продолжаем выполнение
+
+set SRVCNAME=zapret
+
+net stop %SRVCNAME%
+sc delete %SRVCNAME%
+
+net stop "WinDivert"
+sc delete "WinDivert"
+net stop "WinDivert14"
+sc delete "WinDivert14"
+
+echo Обход (автозапуск) успешно удален.
+
+REM Завершаем выполнение программы
+exit /b
+
+
+:warzone_fix
+cls
+REM Скачиваем и проверяем наличие файла COD_FIXv2.bat, если его нет, скачиваем
+
+echo Скачиваю и проверяю наличие файла COD_FIXv2.bat...
+
+if not exist "%file10%" (
+    echo Файл %file10% не найден. Загружаю файл...
+    powershell -Command "Invoke-WebRequest -Uri %url10% -OutFile %file10%"
+    if %ERRORLEVEL% NEQ 0 (
+        echo Ошибка загрузки файла %file10%. Код ошибки: %ERRORLEVEL%
+        timeout /t 2 /nobreak >nul
+        exit /b 1
+    )
+)
+
+
+cls
+REM Проверяем успешность загрузки
+if not exist "%file10%" (
+    echo Файл %file10% не был загружен. Завершаю программу.
+    exit /b 1
+)
+
+cls
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+if '%errorlevel%' NEQ '0' (
+    echo Необходимо запустить скрипт с правами администратора.
+    pause
+    exit /b
+)
+
+cls
+REM Запуск файла COD_FIXv2.bat
+echo Файл COD_FIXv2.bat найден, выполняю...
+call "%file10%"
+timeout /t 2 /nobreak >nul
 
 REM Завершаем выполнение программы
 exit /b
