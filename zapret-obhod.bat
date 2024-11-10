@@ -17,15 +17,18 @@ set "flag_file=%~dp0bin\first_run_flag.txt"
 
 REM Проверяем, существует ли файл флага
 if not exist "%flag_file%" (
+     mode con: cols=64 lines=12
      cls
     color 0A
-    echo ================================
+    echo ======================================================
     echo  Это первый запуск программы
     echo  Перезапустите программу без прав администратора.
-    echo ================================
+    echo ======================================================
     echo.
+    echo.
+    echo ======================================================
     echo Программа автоматически закроется через 5 секунд.
-    echo ================================
+    echo ======================================================
     echo This is the first run. > "%flag_file%"
     timeout /t 5 /nobreak >nul
     exit /b
@@ -36,10 +39,10 @@ if not exist "%flag_file%" (
         :: Если прав нет, перезапускаем скрипт с правами администратора
         cls
         color 0C
-        echo ================================
+        echo ======================================================
         echo  Необходимы права администратора
         echo  Перезапускаю с правами администратора...
-        echo ================================
+        echo ======================================================
         powershell -Command "Start-Process cmd -ArgumentList '/c, %~f0' -Verb RunAs"
         exit /b
     )
@@ -80,38 +83,52 @@ REM Очищаем экран перед началом загрузки
 cls
 
 REM Выводим сообщение о начале загрузки
+cls
+color 0B
+echo ================================
 echo Загрузка файлов...
+echo ================================
 
 REM Перебираем все файлы и проверяем их наличие
-call :check_and_download "%file1%" "%url1%"
-call :check_and_download "%file2%" "%url2%"
-call :check_and_download "%file3%" "%url3%"
-call :check_and_download "%file4%" "%url4%"
-call :check_and_download "%file5%" "%url5%"
-call :check_and_download "%file6%" "%url6%"
-call :check_and_download "%file7%" "%url7%"
-call :check_and_download "%file8%" "%url8%"
-call :check_and_download "%file9%" "%url9%"
+call :check_and_download "%file1%" "%url1%" >nul
+call :check_and_download "%file2%" "%url2%" >nul
+call :check_and_download "%file3%" "%url3%" >nul 
+call :check_and_download "%file4%" "%url4%" >nul
+call :check_and_download "%file5%" "%url5%" >nul
+call :check_and_download "%file6%" "%url6%" >nul
+call :check_and_download "%file7%" "%url7%" >nul
+call :check_and_download "%file8%" "%url8%" >nul 
+call :check_and_download "%file9%" "%url9%" >nul
 
 REM Очищаем экран перед выводом заключительного сообщения
 cls
 
 REM После завершения всех загрузок выводим сообщение об успешном завершении
+
+color 0B
+echo ================================
 echo Все файлы успешно загружены.
+echo ================================
 
 REM Меню выбора действия
 
+mode con: cols=52 lines=14
 
 cls
 color 0B
-echo ================================
+echo ==================================================
 echo Выберите код для выполнения:
-echo ================================
+echo ==================================================
 echo 1. Временный обход
+echo.
 echo 2. Постоянный обход (автозапуск)
+echo.
 echo 3. Удалить обход (автозапуск)
+echo.
 echo 4. Warzone (фикс-костыль)
-echo ================================
+echo ==================================================
+echo Запусать только от именни Администратора
+echo ==================================================
 set /p choice=Введите номер выбранного действия:
 
 if "%choice%"=="1" (
@@ -346,23 +363,6 @@ cls
 REM Скачиваем и проверяем наличие файла COD_FIXv2.bat, если его нет, скачиваем
 
 
-REM Проверяем, запущен ли скрипт от имени администратора
-openfiles >nul 2>nul
-cls
-if '%errorlevel%' NEQ '0' (
-    
-    
-    cls
-    color 0A
-    echo =====================================================
-    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
-    echo =====================================================
-    echo.
-    
-    timeout /t 2 /nobreak >nul
-    exit /b
-)
-
 
 color 0A
     echo ===================================================
@@ -393,6 +393,27 @@ if not exist "%file10%" (
     exit /b 1
 )
 
+mode con: cols=75 lines=42
+
+cls
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+cls
+if '%errorlevel%' NEQ '0' (
+    
+    mode con: cols=75 lines=42
+    
+    cls
+    color 0A
+    echo =====================================================
+    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
+    echo =====================================================
+    echo.
+    pause
+    pause
+
+    exit /b
+)
 
 mode con: cols=52 lines=4
 
