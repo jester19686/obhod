@@ -193,6 +193,8 @@ echo.
 echo 3. Удалить обход (автозапуск)
 echo.
 echo 4. Warzone (фикс-костыль)
+echo.
+echo 5. Бесплатный VPN
 echo ==================================================
 echo Сделано Владиславом Трифоловым
 echo ==================================================
@@ -206,6 +208,8 @@ if "%choice%"=="1" (
     call :remove_bypass
 ) else if "%choice%"=="4" (
     call :warzone_fix
+) else if "%choice%"=="5" (
+    call :vpn_fix
 ) else (
     echo Неверный выбор. Завершаю программу.
     exit /b
@@ -493,6 +497,63 @@ color 0A
     echo====================================================
     timeout /t 2 /nobreak >nul
 call "%file10%"
+timeout /t 2 /nobreak >nul
+
+REM Завершаем выполнение программы
+exit /b
+
+
+
+:vpn_fix
+cls
+REM Скачиваем и проверяем наличие файла VPN.bat, если его нет, скачиваем
+
+mode con: cols=75 lines=42
+
+cls
+REM Проверяем, запущен ли скрипт от имени администратора
+call :check_admin
+
+mode con: cols=52 lines=4
+
+color 0A
+    echo ===================================================
+    echo Скачиваю и проверяю наличие файла VPN.bat...
+    echo ===================================================
+
+timeout /t 2 /nobreak >nul
+
+if not exist "%file11%" (
+    echo Файл %file11% не найден. Загружаю файл...
+    powershell -Command "Invoke-WebRequest -Uri %url11% -OutFile %file11%"
+    if %ERRORLEVEL% NEQ 0 (
+        echo Ошибка загрузки файла %file11%. Код ошибки: %ERRORLEVEL%
+        timeout /t 2 /nobreak >nul
+        exit /b 1
+    )
+)
+
+cls
+REM Проверяем успешность загрузки
+if not exist "%file11%" (
+    color 0A
+    echo ===================================================
+    echo Файл %file11% не был загружен. Завершаю программу.
+    echo ===================================================
+    timeout /t 2 /nobreak >nul
+    exit /b 1
+)
+
+mode con: cols=52 lines=4
+
+cls
+REM Запуск файла VPN.bat
+color 0A
+    echo ===================================================
+    echo Файл VPN.bat найден, выполняю...
+    echo ===================================================
+    timeout /t 2 /nobreak >nul
+call "%file11%"
 timeout /t 2 /nobreak >nul
 
 REM Завершаем выполнение программы
