@@ -147,6 +147,8 @@ echo.
 echo 3. Удалить обход (автозапуск)
 echo.
 echo 4. Warzone (фикс-костыль)
+echo.
+echo 5. Обновление баз данных
 echo ==================================================
 echo Запусать только от именни Администратора
 echo ==================================================
@@ -160,6 +162,8 @@ if "%choice%"=="1" (
     call :remove_bypass
 ) else if "%choice%"=="4" (
     call :warzone_fix
+) else if "%choice%"=="5" (
+    call :update_bases
 ) else (
     echo Неверный выбор. Завершаю программу.
     exit /b
@@ -470,4 +474,38 @@ call "%file10%"
 timeout /t 2 /nobreak >nul
 
 REM Завершаем выполнение программы
+exit /b
+
+
+:update_bases
+REM Обновление баз из GitHub
+
+cls
+color 0B
+echo ================================
+echo Обновление баз...
+echo ================================
+
+REM Скачиваем файлы заново
+set "file4=%folder%\ipset-discord.txt"
+set "url4=https://raw.githubusercontent.com/jester19686/obhod/main/bin/ipset-discord.txt"
+
+set "file5=%folder%\list-discord.txt"
+set "url5=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-discord.txt"
+
+set "file6=%folder%\list-general.txt"
+set "url6=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt"
+
+REM Проверяем и скачиваем каждый файл
+call :check_and_download "%file4%" "%url4%" >nul
+call :check_and_download "%file5%" "%url5%" >nul
+call :check_and_download "%file6%" "%url6%" >nul
+
+cls
+color 0B
+echo ================================
+echo Обновление баз завершено.
+echo ================================
+
+timeout /t 2 /nobreak >nul
 exit /b
