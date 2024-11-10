@@ -17,7 +17,7 @@ echo   \/_/   \/_/ /_/\/_/\/_/   \/_/     \/_____/   \/_/ \/_/ \/____/
 echo                                                                  
 echo ========================== YTAZH52 ==============================
 
-timeout /t 5 >nul
+timeout /t 2 >nul
 
 mode con: cols=52 lines=10
 
@@ -151,7 +151,7 @@ echo ================================
 
 REM Меню выбора действия
 
-mode con: cols=52 lines=14
+mode con: cols=52 lines=16
 
 cls
 color 0B
