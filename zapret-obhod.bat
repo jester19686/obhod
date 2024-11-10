@@ -192,9 +192,9 @@ echo 2. Постоянный обход (автозапуск)
 echo.
 echo 3. Удалить обход (автозапуск)
 echo.
-echo 4. Warzone (фикс-костыль)
+echo 4. Бесплатный VPN
 echo.
-echo 5. Бесплатный VPN
+echo 5. Warzone (фикс-костыль)
 echo ==================================================
 echo Сделано Владиславом Трифоловым
 echo ==================================================
@@ -207,9 +207,9 @@ if "%choice%"=="1" (
 ) else if "%choice%"=="3" (
     call :remove_bypass
 ) else if "%choice%"=="4" (
-    call :warzone_fix
-) else if "%choice%"=="5" (
     call :vpn_fix
+) else if "%choice%"=="5" (
+    call :warzone_fix
 ) else (
     echo Неверный выбор. Завершаю программу.
     exit /b
