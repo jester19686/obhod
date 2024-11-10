@@ -562,3 +562,20 @@ echo ================================
 timeout /t 2 /nobreak >nul
 
 exit /b
+
+
+
+:check_and_download
+REM Функция для загрузки файла
+set "file=%1"
+set "url=%2"
+
+echo Загружаю %file% ...
+powershell -Command "Invoke-WebRequest -Uri %url% -OutFile %file%"
+
+REM Проверяем успешность загрузки
+if exist "%file%" (
+    echo %file% успешно загружен.
+) else (
+    echo Ошибка загрузки %file%. Проверьте подключение или URL.
+)
