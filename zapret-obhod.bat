@@ -502,7 +502,7 @@ REM Обновление баз из GitHub
 REM Проверяем, запущен ли скрипт от имени администратора
 call :check_admin
 
-
+mode con: cols=52 lines=4
 cls
 color 0B
 echo ================================
