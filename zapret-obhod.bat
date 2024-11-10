@@ -173,8 +173,27 @@ if not exist "%file%" (
 )
 goto :eof
 
+
 :temporary_bypass
 REM Временный обход
+
+
+REM Проверяем, запущен ли скрипт от имени администратора
+openfiles >nul 2>nul
+if '%errorlevel%' NEQ '0' (
+    cls
+    color 0A
+    echo =====================================================
+    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
+    echo =====================================================
+    echo.
+    timeout /t 4 /nobreak >nul
+    exit /b
+)
+
+
+mode con: cols=48 lines=4
+
 cls
 color 0A
 echo ================================
@@ -201,6 +220,8 @@ start "zapret: general" /min "%BIN%winws.exe" ^
 
 
 cls
+
+mode con: cols=48 lines=4
 
 echo ================================
 echo Временный обход выполнен.
@@ -322,7 +343,7 @@ if '%errorlevel%' NEQ '0' (
     echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
     echo =====================================================
     echo.
-    pause
+    timeout /t 4 /nobreak >nul
     exit /b
 )
 
