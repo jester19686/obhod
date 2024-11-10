@@ -181,18 +181,13 @@ color 0B
 echo ==================================================
 echo Выберите код для выполнения:
 echo ==================================================
-
 echo 1. Временный обход
 echo.
 echo 2. Постоянный обход (автозапуск)
 echo.
-
 echo 3. Удалить обход (автозапуск)
 echo.
 echo 4. Warzone (фикс-костыль)
-echo.
-echo 5. Обновление баз данных
-
 echo ==================================================
 echo Сделано Владиславом Трифоловым
 echo ==================================================
@@ -206,8 +201,6 @@ if "%choice%"=="1" (
     call :remove_bypass
 ) else if "%choice%"=="4" (
     call :warzone_fix
-) else if "%choice%"=="5" (
-    call :update_bases
 ) else (
     echo Неверный выбор. Завершаю программу.
     exit /b
@@ -499,73 +492,3 @@ timeout /t 2 /nobreak >nul
 
 REM Завершаем выполнение программы
 exit /b
-
-
-:update_bases
-REM Обновление баз из GitHub
-
-REM Проверяем, запущен ли скрипт от имени администратора
-call :check_admin
-
-mode con: cols=52 lines=4
-cls
-color 0B
-echo ================================
-echo Обновление баз...
-echo ================================
-
-timeout /t 1 /nobreak >nul
-
-REM Указываем папку для хранения файлов
-set "folder=%bin%"
-
-REM Убедимся, что папка существует, если нет — создаем ее
-if not exist "%folder%" (
-    mkdir "%folder%"
-)
-
-REM Список файлов и URL-адресов для загрузки
-set "file4=%folder%\ipset-discord.txt"
-set "url4=https://raw.githubusercontent.com/jester19686/obhod/main/bin/ipset-discord.txt"
-
-set "file5=%folder%\list-discord.txt"
-set "url5=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-discord.txt"
-
-set "file6=%folder%\list-general.txt"
-set "url6=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt"
-
-REM Переустанавливаем каждый файл, удаляя старый и загружая новый
-if exist "%file4%" del "%file4%"
-if exist "%file5%" del "%file5%"
-if exist "%file6%" del "%file6%"
-
-call :check_and_download "%file4%" "%url4%" >nul
-call :check_and_download "%file5%" "%url5%" >nul
-call :check_and_download "%file6%" "%url6%" >nul
-
-cls
-color 0B
-echo ================================
-echo Обновление баз завершено.
-echo ================================
-
-timeout /t 2 /nobreak >nul
-
-exit /b
-
-
-
-:check_and_download
-REM Функция для загрузки файла
-set "file=%1"
-set "url=%2"
-
-echo Загружаю %file% ...
-powershell -Command "Invoke-WebRequest -Uri %url% -OutFile %file%"
-
-REM Проверяем успешность загрузки
-if exist "%file%" (
-    echo %file% успешно загружен.
-) else (
-    echo Ошибка загрузки %file%. Проверьте подключение или URL.
-)
