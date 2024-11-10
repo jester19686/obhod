@@ -2,6 +2,14 @@
 chcp 65001 >nul
 setlocal enabledelayedexpansion >nul
 
+
+REM Устанавливаем цвет текста и фона (например, зелёный текст на чёрном фоне)
+color 0A
+
+REM Устанавливаем заголовок окна
+title BY Ytazh52
+
+
 cls
 mode con: cols=74 lines=12 >nul
 REM ASCII-надпись
