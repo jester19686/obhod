@@ -230,24 +230,31 @@ if not exist "%file%" (
 )
 goto :eof
 
-
-:temporary_bypass
-REM Временный обход
-
-
-REM Проверяем, запущен ли скрипт от имени администратора
+:check_admin
 openfiles >nul 2>nul
 if '%errorlevel%' NEQ '0' (
-    cls
+      cls
     color 0A
     echo =====================================================
     echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
     echo =====================================================
     echo.
     timeout /t 4 /nobreak >nul
+    powershell -Command "Start-Process cmd -ArgumentList '/c, %~f0' -Verb RunAs"
     exit /b
 )
+goto :eof
 
+
+
+
+
+:temporary_bypass
+REM Временный обход
+
+
+REM Проверяем, запущен ли скрипт от имени администратора
+call :check_admin
 
 mode con: cols=48 lines=4
 
