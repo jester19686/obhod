@@ -33,6 +33,11 @@ set "url=https://raw.githubusercontent.com/jester19686/obhod/main/zapret-obhod.b
 set "tempFile=%TEMP%\zapret-obhod-temp.bat"
 set "currentFile=%~f0"
 
+call :check_and_update_script
+exit /b
+
+
+:check_and_update_script
 REM Проверка на обновление скрипта
 powershell -command "(New-Object Net.WebClient).DownloadFile('%url%', '%tempFile%')"
 
