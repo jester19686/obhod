@@ -523,6 +523,13 @@ set "url5=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-disc
 set "file6=%folder%\list-general.txt"
 set "url6=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt"
 
+
+if exist "%file4%" del "%file4%"
+if exist "%file5%" del "%file5%"
+if exist "%file6%" del "%file6%"
+
+timeout /t 1 /nobreak >nul
+
 REM Проверяем и скачиваем каждый файл
 call :check_and_download "%file4%" "%url4%" >nul
 call :check_and_download "%file5%" "%url5%" >nul
