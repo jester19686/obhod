@@ -34,5 +34,3 @@ discord-attachments-uploads-prd.storage.googleapis.com
 7tv.io
 10tv.app
 cloudflare-ech.com
-lordfilms.cc
-23.mose.live
