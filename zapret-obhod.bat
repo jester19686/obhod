@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion >nul
 
 cls
-mode con: cols=80 lines=12 >nul
+mode con: cols=70 lines=8 >nul
 REM ASCII-надпись
 
 color 0A
@@ -17,7 +17,7 @@ echo   \/_/   \/_/ /_/\/_/\/_/   \/_/     \/_____/   \/_/ \/_/ \/____/
 echo                                                                  
 echo ========================== YTAZH52 ==============================
 
-timeout /t 5 >nul
+timeout /t 6 >nul
 
 mode con: cols=52 lines=10
 
