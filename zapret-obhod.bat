@@ -511,9 +511,15 @@ echo ================================
 
 timeout /t 1 /nobreak >nul
 
+REM Указываем папку для хранения файлов
 set "folder=bin"
 
-REM Скачиваем файлы заново
+REM Убедимся, что папка существует, если нет — создаем ее
+if not exist "%folder%" (
+    mkdir "%folder%"
+)
+
+REM Список файлов и URL-адресов для загрузки
 set "file4=%folder%\ipset-discord.txt"
 set "url4=https://raw.githubusercontent.com/jester19686/obhod/main/bin/ipset-discord.txt"
 
@@ -523,19 +529,37 @@ set "url5=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-disc
 set "file6=%folder%\list-general.txt"
 set "url6=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt"
 
+REM Переустанавливаем каждый файл, удаляя старый и загружая новый
+call :reinstall_file "%file4%" "%url4%"
+call :reinstall_file "%file5%" "%url5%"
+call :reinstall_file "%file6%" "%url6%"
 
-if exist "%file4%" del "%file4%"
-if exist "%file5%" del "%file5%"
-if exist "%file6%" del "%file6%"
+echo Все файлы успешно переустановлены.
+exit /b
 
-timeout /t 1 /nobreak >nul
+:reinstall_file
+REM Параметры функции: %1 - путь к файлу, %2 - URL для загрузки
 
-REM Проверяем и скачиваем каждый файл
-call :check_and_download "%file4%" "%url4%" >nul
-call :check_and_download "%file5%" "%url5%" >nul
-call :check_and_download "%file6%" "%url6%" >nul
+set "file=%1"
+set "url=%2"
 
-mode con: cols=32 lines=6
+REM Удаляем файл, если он существует
+if exist "%file%" (
+    echo Удаляю старый файл: %file%
+    del "%file%"
+)
+
+REM Загружаем файл с URL
+echo Загружаю %file% ...
+powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile '%file%'"
+
+REM Проверка успешности загрузки
+if exist "%file%" (
+    echo %file% успешно загружен.
+) else (
+    echo Ошибка загрузки %file%. Проверьте подключение или URL.
+)
+goto :eof
 
 cls
 color 0B
