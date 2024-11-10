@@ -247,7 +247,7 @@ if '%errorlevel%' NEQ '0' (
     echo =====================================================
     echo.
  timeout /t 2 /nobreak >nul
-    powershell -Command "Start-Process cmd -ArgumentList '/c, %~f0' -Verb RunAs"
+    powershell -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
     exit /b
 )
 goto :eof
