@@ -239,7 +239,14 @@ if '%errorlevel%' NEQ '0' (
     echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
     echo =====================================================
     echo.
-    timeout /t 4 /nobreak >nul
+    timeout /t 3 /nobreak >nul
+ cls
+    color 0A
+    echo =====================================================
+    echo ЗАПУСК С ПРАВАМИ АДМИНИСТРАТОРА!
+    echo =====================================================
+    echo.
+ timeout /t 2 /nobreak >nul
     powershell -Command "Start-Process cmd -ArgumentList '/c, %~f0' -Verb RunAs"
     exit /b
 )
@@ -307,17 +314,8 @@ REM Очищаем экран перед выводом сообщения о н
 cls
 
 REM Проверяем, запущен ли скрипт от имени администратора
-openfiles >nul 2>nul
-if '%errorlevel%' NEQ '0' (
-    cls
-    color 0A
-    echo =====================================================
-    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
-    echo =====================================================
-    echo.
-    pause
-    exit /b
-)
+
+call :check_admin
 
 cls
 
@@ -399,17 +397,7 @@ REM Очищаем экран перед выводом сообщения о н
 cls
 
 REM Проверяем, запущен ли скрипт от имени администратора
-openfiles >nul 2>nul
-if '%errorlevel%' NEQ '0' (
-    cls
-    color 0A
-    echo =====================================================
-    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
-    echo =====================================================
-    echo.
-    timeout /t 4 /nobreak >nul
-    exit /b
-)
+call :check_admin
 
 
 color 0A
@@ -451,22 +439,7 @@ mode con: cols=75 lines=42
 
 cls
 REM Проверяем, запущен ли скрипт от имени администратора
-openfiles >nul 2>nul
-cls
-if '%errorlevel%' NEQ '0' (
-    
-    mode con: cols=80 lines=25
-    
-    cls
-    color 0A
-    echo =====================================================
-    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
-    echo =====================================================
-    echo.
-         
-    timeout /t 4 /nobreak >nul
-    exit /b
-)
+call :check_admin
 
 mode con: cols=52 lines=4
 
@@ -520,17 +493,7 @@ exit /b
 REM Обновление баз из GitHub
 
 REM Проверяем, запущен ли скрипт от имени администратора
-openfiles >nul 2>nul
-if '%errorlevel%' NEQ '0' (
-    cls
-    color 0A
-    echo =====================================================
-    echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
-    echo =====================================================
-    echo.
-    timeout /t 4 /nobreak >nul
-    exit /b
-)
+call :check_admin
 
 
 cls
