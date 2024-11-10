@@ -508,13 +508,13 @@ exit /b
 cls
 REM Скачиваем и проверяем наличие файла VPN.bat, если его нет, скачиваем
 
-mode con: cols=75 lines=42
+mode con: cols=35 lines=10
 
 cls
 REM Проверяем, запущен ли скрипт от имени администратора
 call :check_admin
 
-mode con: cols=52 lines=4
+mode con: cols=35 lines=4
 
 color 0A
     echo ===================================================
