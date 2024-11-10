@@ -4,6 +4,27 @@ setlocal enabledelayedexpansion
 mode con: cols=52 lines=10
 
 
+REM URL для обновления скрипта
+set "url=https://raw.githubusercontent.com/jester19686/obhod/main/zapret-obhod.bat"
+set "tempFile=%TEMP%\zapret-obhod-temp.bat"
+set "currentFile=%~f0"
+
+REM Проверка на обновление скрипта
+powershell -command "(New-Object Net.WebClient).DownloadFile('%url%', '%tempFile%')"
+
+fc /b "%currentFile%" "%tempFile%" >nul
+if %errorlevel% neq 0 (
+    echo Обнаружено обновление. Обновляемся...
+    copy /y "%tempFile%" "%currentFile%"
+    echo Скрипт обновлен. Перезапуск...
+    start "" "%currentFile%"
+    exit
+) else (
+    echo Обновлений нет. Продолжаем выполнение скрипта.
+)
+
+del "%tempFile%"
+
 REM Указываем папку для хранения файлов
 set "folder=bin"
 
