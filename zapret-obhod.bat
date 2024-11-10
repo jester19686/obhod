@@ -404,6 +404,8 @@ if '%errorlevel%' NEQ '0' (
     exit /b
 )
 
+mode con: cols=52 lines=4
+
 color 0A
     echo ===================================================
     echo Скачиваю и проверяю наличие файла COD_FIXv2.bat...
