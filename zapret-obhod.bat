@@ -535,24 +535,9 @@ set "file6=%folder%\list-general.txt"
 set "url6=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt"
 
 REM Переустанавливаем каждый файл, удаляя старый и загружая новый
-call :reinstall_file "%file4%" "%url4%"
-call :reinstall_file "%file5%" "%url5%"
-call :reinstall_file "%file6%" "%url6%"
-
-echo Все файлы успешно переустановлены.
-exit /b
-
-:reinstall_file
-REM Параметры функции: %1 - путь к файлу, %2 - URL для загрузки
-
-set "file=%1"
-set "url=%2"
-
-REM Удаляем файл, если он существует
-if exist "%file%" (
-    echo Удаляю старый файл: %file%
-    del "%file%"
-)
+if exist "%file4%" del "%file4%"
+if exist "%file5%" del "%file5%"
+if exist "%file6%" del "%file6%"
 
 call :check_and_download "%file4%" "%url4%" >nul
 call :check_and_download "%file5%" "%url5%" >nul
