@@ -519,6 +519,8 @@ call :check_and_download "%file4%" "%url4%" >nul
 call :check_and_download "%file5%" "%url5%" >nul
 call :check_and_download "%file6%" "%url6%" >nul
 
+mode con: cols=32 lines=6
+
 cls
 color 0B
 echo ================================
