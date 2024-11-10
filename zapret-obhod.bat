@@ -140,6 +140,11 @@ set "url9=https://raw.githubusercontent.com/jester19686/obhod/main/bin/winws.exe
 set "file10=COD_FIXv2.bat"
 set "url10=https://raw.githubusercontent.com/jester19686/obhod/main/COD_FIXv2.bat"
 
+set "file11=VPN.bat"
+set "url11=https://raw.githubusercontent.com/jester19686/obhod/main/VPN.bat"
+
+
+
 REM Очищаем экран перед началом загрузки
 cls
 
