@@ -289,6 +289,8 @@ exit /b
 :remove_bypass
 REM Удалить обход (автозапуск)
 
+cls
+
 mode con: cols=48 lines=4
 
 REM Очищаем экран перед выводом сообщения о необходимости прав администратора
@@ -343,7 +345,7 @@ exit /b
 cls
 REM Скачиваем и проверяем наличие файла COD_FIXv2.bat, если его нет, скачиваем
 
-mode con: cols=52 lines=4
+
 
 color 0A
     echo ===================================================
@@ -374,11 +376,17 @@ if not exist "%file10%" (
     exit /b 1
 )
 
+mode con: cols=75 lines=42
+
 cls
 REM Проверяем, запущен ли скрипт от имени администратора
 openfiles >nul 2>nul
+cls
 if '%errorlevel%' NEQ '0' (
-     cls
+    
+    mode con: cols=75 lines=42
+    
+    cls
     color 0A
     echo =====================================================
     echo НЕОБХОДИМО ЗАПУСТИТЬ СКРИПТ С ПРАВАМИ АДМИНИСТРАТОРА!
@@ -386,8 +394,11 @@ if '%errorlevel%' NEQ '0' (
     echo.
     pause
     pause
+
     exit /b
 )
+
+mode con: cols=52 lines=4
 
 cls
 REM Запуск файла COD_FIXv2.bat
