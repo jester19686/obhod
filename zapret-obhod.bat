@@ -1,10 +1,12 @@
-@echo off
+@echo off >nul
 chcp 65001 >nul
-setlocal enabledelayedexpansion
+setlocal enabledelayedexpansion >nul
 
-
-mode con: cols=80 lines=12
+cls
+mode con: cols=80 lines=12 >nul
 REM ASCII-надпись
+
+color 0A
 cls
 echo ================================================================
 echo  __     ______  ______     ______   __  __     __   __   _____  
@@ -14,7 +16,8 @@ echo  \ \_\  \ \_\ \_\ \_\ \_\  \ \_\    \ \_____\  \ \_\\"\_\\ \____-
 echo   \/_/   \/_/ /_/\/_/\/_/   \/_/     \/_____/   \/_/ \/_/ \/____/
 echo                                                                  
 echo ========================== YTAZH52 ==============================
-timeout /t 2 >nul
+
+timeout /t 5 >nul
 
 mode con: cols=52 lines=10
 
