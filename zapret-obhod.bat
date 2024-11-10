@@ -97,17 +97,36 @@ if not exist "%flag_file%" (
 )
 
 REM Указываем файлы и их URL для загрузки
-REM Список файлов и URL-адресов
-set "files_urls=WinDivert.dll https://raw.githubusercontent.com/jester19686/obhod/main/bin/WinDivert.dll
-              WinDivert64.sys https://raw.githubusercontent.com/jester19686/obhod/main/bin/WinDivert64.sys
-              cygwin1.dll https://raw.githubusercontent.com/jester19686/obhod/main/bin/cygwin1.dll
-              ipset-discord.txt https://raw.githubusercontent.com/jester19686/obhod/main/bin/ipset-discord.txt
-              list-discord.txt https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-discord.txt
-              list-general.txt https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt
-              quic_initial_www_google_com.bin https://raw.githubusercontent.com/jester19686/obhod/main/bin/quic_initial_www_google_com.bin
-              tls_clienthello_www_google_com.bin https://raw.githubusercontent.com/jester19686/obhod/main/bin/tls_clienthello_www_google_com.bin
-              winws.exe https://raw.githubusercontent.com/jester19686/obhod/main/bin/winws.exe
-              COD_FIXv2.bat https://raw.githubusercontent.com/jester19686/obhod/main/COD_FIXv2.bat"
+REM Указываем файлы и их URL для загрузки
+set "file1=%folder%\WinDivert.dll"
+set "url1=https://raw.githubusercontent.com/jester19686/obhod/main/bin/WinDivert.dll"
+
+set "file2=%folder%\WinDivert64.sys"
+set "url2=https://raw.githubusercontent.com/jester19686/obhod/main/bin/WinDivert64.sys"
+
+set "file3=%folder%\cygwin1.dll"
+set "url3=https://raw.githubusercontent.com/jester19686/obhod/main/bin/cygwin1.dll"
+
+set "file4=%folder%\ipset-discord.txt"
+set "url4=https://raw.githubusercontent.com/jester19686/obhod/main/bin/ipset-discord.txt"
+
+set "file5=%folder%\list-discord.txt"
+set "url5=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-discord.txt"
+
+set "file6=%folder%\list-general.txt"
+set "url6=https://raw.githubusercontent.com/jester19686/obhod/main/bin/list-general.txt"
+
+set "file7=%folder%\quic_initial_www_google_com.bin"
+set "url7=https://raw.githubusercontent.com/jester19686/obhod/main/bin/quic_initial_www_google_com.bin"
+
+set "file8=%folder%\tls_clienthello_www_google_com.bin"
+set "url8=https://raw.githubusercontent.com/jester19686/obhod/main/bin/tls_clienthello_www_google_com.bin"
+
+set "file9=%folder%\winws.exe"
+set "url9=https://raw.githubusercontent.com/jester19686/obhod/main/bin/winws.exe"
+
+set "file10=COD_FIXv2.bat"
+set "url10=https://raw.githubusercontent.com/jester19686/obhod/main/COD_FIXv2.bat"
 
 REM Очищаем экран перед началом загрузки
 cls
@@ -120,9 +139,15 @@ echo Загрузка файлов...
 echo ================================
 
 REM Перебираем все файлы и проверяем их наличие
-for %%A in (%files_urls%) do (
-    call :check_and_download "%folder%\%%A" "%%B"
-)
+call :check_and_download "%file1%" "%url1%" >nul
+call :check_and_download "%file2%" "%url2%" >nul
+call :check_and_download "%file3%" "%url3%" >nul 
+call :check_and_download "%file4%" "%url4%" >nul
+call :check_and_download "%file5%" "%url5%" >nul
+call :check_and_download "%file6%" "%url6%" >nul
+call :check_and_download "%file7%" "%url7%" >nul
+call :check_and_download "%file8%" "%url8%" >nul 
+call :check_and_download "%file9%" "%url9%" >nul
 
 REM Очищаем экран перед выводом заключительного сообщения
 cls
