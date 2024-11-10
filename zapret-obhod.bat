@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion >nul
 
 cls
-mode con: cols=70 lines=8 >nul
+mode con: cols=70 lines=10 >nul
 REM ASCII-надпись
 
 color 0A
