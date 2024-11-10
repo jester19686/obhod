@@ -511,7 +511,7 @@ echo ================================
 
 timeout /t 1 /nobreak >nul
 
-
+set "folder=bin"
 
 REM Скачиваем файлы заново
 set "file4=%folder%\ipset-discord.txt"
