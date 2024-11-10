@@ -10,7 +10,7 @@ set "url_self=https://raw.githubusercontent.com/jester19686/obhod/main/zapret-ob
 
 :: Временный файл для загрузки
 set "temp_file=%temp%\zapret-obhod_temp.bat"
-
+cls
 :: Проверка, существует ли локальная версия
 echo Проверка обновлений для %this_file%...
 
@@ -22,10 +22,13 @@ if exist "%temp_file%" (
     :: Сравниваем локальную версию с удалённой
     fc /b "%temp_file%" "%this_file%" >nul
     if errorlevel 1 (
+        cls
         echo Обнаружено обновление! Загружаем новую версию...
         copy /y "%temp_file%" "%this_file%"
-        echo Программа обновлена. Перезапустите её.
+        timeout /t 1 /nobreak >nul
+        echo Программа обновлена. Перезапуск.
         del "%temp_file%"
+        timeout /t 1 /nobreak >nul
         exit /b
     ) else (
         echo Обновлений нет.
